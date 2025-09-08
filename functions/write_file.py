@@ -1,5 +1,8 @@
-import sys
 import os
+from dotenv import load_dotenv
+from google import genai
+import sys
+from google.genai import types
 from functions.config import *
 
 def write_file(working_directory, file_path, content):
@@ -15,3 +18,21 @@ def write_file(working_directory, file_path, content):
         return f'Successfully wrote to "{file_path}" ({len(content)} characters written)'
     except Exception as e:
         return f"ERROR:{e}"
+
+schema_write_file = types.FunctionDeclaration(
+    name="write_file",
+    description="writes data to a file, overwriting any existing data in the process. if the directory path does not exist, it creates the directory(ies) and the file.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to save the data to, relative to the working directory. If not provided, the function will not run.",
+            ),
+            "content": types.Schema(
+            type=types.Type.STRING,
+            description="The content you want to save to the file"
+            )
+        },
+    ),
+)

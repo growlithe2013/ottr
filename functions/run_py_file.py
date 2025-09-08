@@ -1,5 +1,8 @@
 import os
+from dotenv import load_dotenv
+from google import genai
 import sys
+from google.genai import types
 from functions.config import *
 import subprocess
 
@@ -34,3 +37,25 @@ def run_py_file(working_directory, file_path, args=[]):
         
     except Exception as e:
         return f"Error: executing Python file: {e}"
+
+
+schema_run_py_file = types.FunctionDeclaration(
+    name="run_py_file",
+    description="runs a python script",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The python file to run, relative to the working directory. If not provided, or if the file is not a python file, the function will not run.",
+            ),
+            "args": types.Schema(
+            type=types.Type.ARRAY,
+            description="any arguments that need to be passed into the python script when running the file. These are optional.",
+            items=types.Schema(
+                type=types.Type.STRING
+            )
+            )
+        },
+    ),
+)
