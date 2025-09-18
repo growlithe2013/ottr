@@ -23,8 +23,24 @@ def main():
 
     match (len(sys.argv)):
         case 1:
-
-            sys.exit(1)
+            response=[]
+            while True:
+                if len(response)>19:
+                    response.pop(0)
+                userIn = input("What is your question? Q to quit, S for settings, enter prompt:")
+                if userIn.upper()=="Q":
+                    sys.exit(0)
+                elif userIn.upper()=="S":
+                    print("There is currently nothing configurable.")
+                else:
+                    while done==False and i<20:
+                        response.append(chat(None, True))
+                        if response[-1].text != None:
+                            done=True
+                        i+=1
+                    print(response[-1].text)
+                    
+            
         
         case 2:
             response=[]
