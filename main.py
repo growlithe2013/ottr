@@ -23,23 +23,8 @@ def main():
 
     match (len(sys.argv)):
         case 1:
-            response=[]
-            while True:
-                if len(response)>19:
-                    response.pop(0)
-                userIn = input("What is your question? Q to quit, S for settings, enter prompt:")
-                if userIn.upper()=="Q":
-                    sys.exit(0)
-                elif userIn.upper()=="S":
-                    print("There is currently nothing configurable.")
-                else:
-                    while done==False and i<20:
-                        response.append(chat(None, True))
-                        if response[-1].text != None:
-                            done=True
-                        i+=1
-                    print(response[-1].text)
-                    
+            print("Please include a string with your first question.")
+
             
         
         case 2:
@@ -56,7 +41,7 @@ def main():
                     i+=1
 
             print(response[-1].text)
-            return
+            
 
         case 3:
             if sys.argv[2]=='--verbose':
@@ -77,8 +62,27 @@ def main():
                 print(f"Response tokens: {response[-1].usage_metadata.candidates_token_count}")
                 
                 sys.exit(0)
-            print("Unknown options. Correct usage: main.py 'prompt' --verbose(optional)")
-            sys.exit(1)
+
+    while True:
+        done=False
+        i=0
+        if len(response)>19:
+            response.pop(0)
+        userIn = input("What is your question? Q to quit, S for settings, enter prompt: ")
+        if userIn.upper()=="Q":
+            sys.exit(0)
+        elif userIn.upper()=="S":
+            print("There is currently nothing configurable.")
+        else:
+            while done==False and i<20:
+                response.append(chat(userIn, True))
+                if response[-1].text != None:
+                    done=True
+                i+=1
+            print(response[-1].text)
+                    
+            
+
 
 
 
