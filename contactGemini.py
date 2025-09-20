@@ -49,7 +49,7 @@ def call_function(function_call_part, verbose=False):
     print(fn(working_directory, **function_call_part.args))
     return fn(working_directory, **function_call_part.args)
 
-def contactGemini(message=f"{sys.argv[1]}", verbose=False, caller="main"):
+def contactGemini(message="", verbose=False, caller="main"):
 
     
     if caller=="Gemini":

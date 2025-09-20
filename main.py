@@ -17,34 +17,36 @@ chat=contactGemini
 
 def main():
 
-
+    verbose=False
 
     print("Hello from ottr!")
 
     match (len(sys.argv)):
-        case 1:
-            print("Please include a string with your first question.")
 
             
         
         case 2:
             response=[]
 
-            response.append(chat())
-            if response[-1].function_calls != None:
-                done=False
-                i=0
-                while done==False and i<20:
-                    response.append(chat(None))
-                    if response[-1].text != None:
-                        done=True
-                    i+=1
+            if sys.argv[1].lower() != "--verbose":
+                response.append(chat(sys.argv[1]))
+                if response[-1].function_calls != None:
+                    done=False
+                    i=0
+                    while done==False and i<20:
+                        response.append(chat(None))
+                        if response[-1].text != None:
+                            done=True
+                        i+=1
 
-            print(response[-1].text)
+                print(response[-1].text)
+            if sys.argv[1].lower()=="--verbose":
+                verbose=True
             
 
         case 3:
-            if sys.argv[2]=='--verbose':
+            if sys.argv[2].lower()=='--verbose':
+                verbose=True
                 response=[]
                 response.append(chat(sys.argv[1], True))
                 if response[-1].function_calls != None:
@@ -61,9 +63,10 @@ def main():
                 print(f"\nPrompt tokens: {response[-1].usage_metadata.prompt_token_count}")
                 print(f"Response tokens: {response[-1].usage_metadata.candidates_token_count}")
                 
-                sys.exit(0)
 
     while True:
+        if "response" not in locals() or "response" not in globals():
+            response=[]
         done=False
         i=0
         if len(response)>19:
@@ -79,7 +82,13 @@ def main():
                 if response[-1].text != None:
                     done=True
                 i+=1
-            print(response[-1].text)
+            if verbose==False:
+                print(response[-1].text)
+            elif verbose == True:
+                print(f"\nUser prompt: {userIn}")            
+                print(f"Final response: {response[-1].text}")
+                print(f"\nPrompt tokens: {response[-1].usage_metadata.prompt_token_count}")
+                print(f"Response tokens: {response[-1].usage_metadata.candidates_token_count}")
                     
             
 
